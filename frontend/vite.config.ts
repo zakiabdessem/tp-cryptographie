@@ -8,4 +8,8 @@ export default defineConfig({
   server: {
     port: 4000,
   },
+  preview: {
+    port: 4000,
+    allowedHosts: ['crypto.z1k1ria.com', 'api-crypto.z1k1ria.com'],
+  },
 })
