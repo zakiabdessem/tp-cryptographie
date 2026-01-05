@@ -1,5 +1,5 @@
 const API_BASE_URL = import.meta.env.PROD
-  ? 'https://api-crypto.lootzone.digital'
+  ? 'https://api-crypto.z1k1ria.com'
   : 'http://localhost:4001';
 
 export type EncryptResponse = {
