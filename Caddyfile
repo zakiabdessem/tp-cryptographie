@@ -1,0 +1,134 @@
+# -----------------------------
+# Main app - lootzone.digital
+# -----------------------------
+www.lootzone.digital {
+    redir https://lootzone.digital{uri} permanent
+}
+
+lootzone.digital {
+    encode zstd gzip
+
+    @api {
+        path /api/*
+    }
+
+    handle @api {
+        @cors_preflight {
+            method OPTIONS
+        }
+
+        handle @cors_preflight {
+            header Access-Control-Allow-Origin "https://admin.lootzone.digital"
+            header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+            header Access-Control-Allow-Headers "Content-Type, Authorization, x-trpc-source, trpc-accept"
+            header Access-Control-Allow-Credentials "true"
+            header Access-Control-Max-Age "86400"
+            respond "" 200
+        }
+
+        reverse_proxy 127.0.0.1:3000 {
+            header_up Host {host}
+            header_up X-Real-IP {remote}
+            header_up X-Forwarded-For {remote}
+            header_up X-Forwarded-Proto {scheme}
+
+            header_down Access-Control-Allow-Origin "https://admin.lootzone.digital"
+            header_down Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+            header_down Access-Control-Allow-Headers "Content-Type, Authorization, x-trpc-source, trpc-accept"
+            header_down Access-Control-Allow-Credentials "true"
+        }
+    }
+
+    reverse_proxy 127.0.0.1:3000
+}
+
+# -----------------------------
+# Admin app
+# -----------------------------
+admin.lootzone.digital {
+    encode zstd gzip
+    reverse_proxy 127.0.0.1:3002
+}
+
+# -----------------------------
+# NEW: result.lootzone.digital
+# (same as lootzone.digital tech)
+# -----------------------------
+result.lootzone.digital {
+    encode zstd gzip
+    reverse_proxy 127.0.0.1:3003
+}
+
+# -----------------------------
+# NEW: api-result.lootzone.digital
+# (same as API setup)
+# -----------------------------
+api-result.lootzone.digital {
+    encode zstd gzip
+
+    @cors_preflight {
+        method OPTIONS
+    }
+
+    handle @cors_preflight {
+        header Access-Control-Allow-Origin "https://result.lootzone.digital"
+        header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+        header Access-Control-Allow-Headers "Content-Type, Authorization"
+        header Access-Control-Allow-Credentials "true"
+        header Access-Control-Max-Age "86400"
+        respond "" 204
+    }
+
+    reverse_proxy 127.0.0.1:3004 {
+        header_up Host {host}
+        header_up X-Real-IP {remote}
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Proto {scheme}
+
+        # 🔥 THIS IS CRITICAL
+        header_down Access-Control-Allow-Origin "https://result.lootzone.digital"
+        header_down Access-Control-Allow-Credentials "true"
+        header_down Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+        header_down Access-Control-Allow-Headers "Content-Type, Authorization"
+    }
+}
+
+# -----------------------------
+# CRYPTO APP: crypto.lootzone.digital
+# -----------------------------
+crypto.lootzone.digital {
+    encode zstd gzip
+    reverse_proxy 127.0.0.1:4000
+}
+
+# -----------------------------
+# CRYPTO API: api-crypto.lootzone.digital
+# -----------------------------
+api-crypto.lootzone.digital {
+    encode zstd gzip
+
+    @cors_preflight {
+        method OPTIONS
+    }
+
+    handle @cors_preflight {
+        header Access-Control-Allow-Origin "https://crypto.lootzone.digital"
+        header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+        header Access-Control-Allow-Headers "Content-Type, Authorization"
+        header Access-Control-Allow-Credentials "true"
+        header Access-Control-Max-Age "86400"
+        respond "" 204
+    }
+
+    reverse_proxy 127.0.0.1:4001 {
+        header_up Host {host}
+        header_up X-Real-IP {remote}
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Proto {scheme}
+
+        header_down Access-Control-Allow-Origin "https://crypto.lootzone.digital"
+        header_down Access-Control-Allow-Credentials "true"
+        header_down Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+        header_down Access-Control-Allow-Headers "Content-Type, Authorization"
+    }
+}

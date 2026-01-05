@@ -1,4 +1,6 @@
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.PROD
+  ? 'https://api-crypto.lootzone.digital'
+  : 'http://localhost:4001';
 
 export type EncryptResponse = {
   ciphertext: string;
