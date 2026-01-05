@@ -530,7 +530,7 @@ This project demonstrates:
 
 ### 🌟 Built with Passion and Security in Mind
 
-**Created by:** Meshari  
+**Created by:** Zakaria Abdessemed (4th Network Engineer)  
 **Course:** Cryptography & Security  
 **Year:** 2026
 
